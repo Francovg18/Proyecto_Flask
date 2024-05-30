@@ -4,6 +4,7 @@ from controllers.doctor_controller import doctor_bp
 from controllers.cita_controller import cita_bp
 from controllers.recordatorio_controller import recordatorio_bp
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS  # Importa CORS
 from database import db
 
 app = Flask(__name__)
@@ -29,6 +30,9 @@ app.register_blueprint(paciente_bp, url_prefix="/api")
 app.register_blueprint(doctor_bp, url_prefix="/api")
 app.register_blueprint(cita_bp, url_prefix="/api")
 app.register_blueprint(recordatorio_bp, url_prefix="/api")
+
+# Aplica CORS a toda la aplicación
+CORS(app)
 
 # Crea las tablas si no existen
 with app.app_context():
