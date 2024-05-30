@@ -1,0 +1,306 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Sistema de Gestión Médica API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/pacientes": {
+      "get": {
+        "summary": "Obtiene la lista de todos los pacientes",
+        "responses": {
+          "200": {
+            "description": "Lista de pacientes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Paciente"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crea un nuevo paciente",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Paciente"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Paciente creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paciente"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/doctores": {
+      "get": {
+        "summary": "Obtiene la lista de todos los doctores",
+        "responses": {
+          "200": {
+            "description": "Lista de doctores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Doctor"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crea un nuevo doctor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Doctor"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Doctor creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Doctor"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/citas": {
+      "get": {
+        "summary": "Obtiene la lista de todas las citas",
+        "responses": {
+          "200": {
+            "description": "Lista de citas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cita"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crea una nueva cita",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cita"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cita creada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cita"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordatorios": {
+      "get": {
+        "summary": "Obtiene la lista de todos los recordatorios",
+        "responses": {
+          "200": {
+            "description": "Lista de recordatorios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Recordatorio"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crea un nuevo recordatorio",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Recordatorio"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Recordatorio creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recordatorio"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Paciente": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefono": {
+            "type": "string"
+          },
+          "fecha_nacimiento": {
+            "type": "string",
+            "format": "date"
+          },
+          "genero": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          }
+        }
+        ,
+        "required": [
+          "nombre",
+          "email",
+          "telefono",
+          "fecha_nacimiento",
+          "genero",
+          "direccion"
+        ]
+      },
+      "Doctor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "especialidad": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefono": {
+            "type": "string"
+          },
+          "horarios_consulta": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nombre",
+          "especialidad",
+          "email",
+          "telefono",
+          "horarios_consulta"
+        ]
+      },
+      "Cita": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "id_paciente": {
+            "type": "integer"
+          },
+          "id_doctor": {
+            "type": "integer"
+          },
+          "fecha_hora": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estado": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        },
+        "required": ["id_paciente", "id_doctor", "fecha_hora", "estado"]
+      },
+      "Recordatorio": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "id_paciente": {
+            "type": "integer"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "fecha_hora": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id_paciente", "titulo", "fecha_hora"]
+      }
+    }
+  }
+}
