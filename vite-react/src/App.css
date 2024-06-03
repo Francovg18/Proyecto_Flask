@@ -1,76 +1,142 @@
-/* Estilos para el contenedor principal */
-.login-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para el título */
-.login-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Estilos para los campos de entrada y botón */
-.input-field {
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  box-sizing: border-box;
-  background-color: #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
+/* Estilo global para asegurar que el fondo cubra toda la pantalla */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
   color: #fff;
+}
+
+/* Estilo general del contenedor */
+.container {
+  display: flex;
+  flex-direction: row; /* Cambia la dirección a fila */
+  justify-content: space-between; /* Espacia entre los dos elementos */
+  padding: 10px;
+  margin: -10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+/* Estilo de la tabla de doctores */
+.doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.doctor-table th, .doctor-table td {
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: left;
+}
+
+.doctor-table th {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.doctor-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Formulario */
+.form {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="tel"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.form input[type="text"]:focus,
+.form input[type="email"]:focus,
+.form input[type="tel"]:focus {
+  border-color: #80bdff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Botón de envío */
+.submit-button {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 25px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  background-color: #007bff;
+  border-radius: 8px;
+  font-size: 16px;
   transition: background-color 0.3s ease;
 }
 
-.button:hover {
-  background-color: #0056b3;
+.submit-button:hover {
+  background-color: #218838;
 }
 
-/* Estilos para los mensajes de estado */
-.status-message {
+/* Estilo para el encabezado */
+h1, h2 {
+  text-align: center;
+  color: #fff;
+}
+
+h1 {
   margin-bottom: 20px;
-  padding: 10px;
+  font-size: 2em;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+/* Botones de acción */
+.edit-button, .delete-button, .submit-button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
   font-size: 14px;
-  border-radius: 5px;
 }
 
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
+/* Botón de editar en amarillo */
+.edit-button {
+  background-color: #ffc107;
+  color: white;
 }
 
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
+.edit-button:hover {
+  background-color: #e0a800;
 }
 
-/* Estilos para la lista de dulces */
-.candy-list {
-  list-style-type: none;
-  padding: 0;
+/* Botón de eliminar en rojo */
+.delete-button {
+  background-color: #dc3545;
+  color: white;
 }
 
-.candy-item {
-  margin-bottom: 10px;
-  padding: 8px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
+.delete-button:hover {
+  background-color: #c82333;
 }

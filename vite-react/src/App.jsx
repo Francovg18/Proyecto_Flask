@@ -1,113 +1,144 @@
 import React, { useState, useEffect } from 'react';
-import './App.css'; // Importa el archivo CSS
+import './App.css'; // Importa tu archivo de estilos CSS
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginResult, setLoginResult] = useState(null);
-  const [candies, setCandies] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function App() {
+  const [doctores, setDoctores] = useState([]);
+  const [editDoctor, setEditDoctor] = useState(null);
+  const [nuevoDoctor, setNuevoDoctor] = useState({
+    nombre: '',
+    especialidad: '',
+    email: '',
+    telefono: '',
+    horarios_consulta: ''
+  });
 
   useEffect(() => {
-    // Verificar si hay un token de acceso en el almacenamiento local al cargar la página
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      setIsLoggedIn(true); // Si hay un token, establecer isLoggedIn en true
-      listCandies(); // Obtener la lista de dulces si el usuario está autenticado
-    }
-  }, []); // Ejecutar solo una vez al cargar la página
+    fetch('http://localhost:5000/api/doctores')
+      .then(response => response.json())
+      .then(data => setDoctores(data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('access_token', data.access_token); // Guardar el token en el almacenamiento local
-        setLoginResult('success');
-        setIsLoggedIn(true); // Establecer el estado de la sesión como iniciada
-        listCandies(); // Obtener la lista de dulces después del inicio de sesión exitoso
-      } else {
-        setLoginResult('error');
-        console.error('Credenciales inválidas');
-      }
-    } catch (error) {
-      setLoginResult('error');
-      console.error('Error al iniciar sesión:', error);
-    }
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setNuevoDoctor(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
-  const listCandies = async () => {
-    try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:5000/api/candies/list', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const candiesData = await response.json();
-        console.log('Dulces obtenidos:', candiesData);
-        setCandies(candiesData); // Actualizar el estado con la lista de dulces recibida
+  const handleSubmit = e => {
+    e.preventDefault();
+    const url = editDoctor ? `http://localhost:5000/api/doctores/${editDoctor.ID_D}` : 'http://localhost:5000/api/doctores';
+    const method = editDoctor ? 'PUT' : 'POST';
+    fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(nuevoDoctor)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (editDoctor) {
+        setDoctores(doctores.map(doctor => doctor.ID_D === editDoctor.ID_D ? data : doctor));
+        setEditDoctor(null);
       } else {
-        console.error('Error al obtener los dulces:', response.statusText);
+        setDoctores(prevState => [...prevState, data]);
       }
-    } catch (error) {
-      console.error('Error al obtener los dulces:', error);
-    }
+      setNuevoDoctor({
+        nombre: '',
+        especialidad: '',
+        email: '',
+        telefono: '',
+        horarios_consulta: ''
+      });
+    })
+    .catch(error => console.error('Error creating/updating doctor:', error));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token'); // Eliminar el token de acceso del almacenamiento local al cerrar sesión
-    setIsLoggedIn(false); // Establecer el estado de la sesión como cerrada
-    setCandies([]); // Limpiar la lista de dulces
-    console.log('Logout exitoso');
+  const handleDelete = id => {
+    fetch(`http://localhost:5000/api/doctores/${id}`, {
+      method: 'DELETE'
+    })
+    .then(() => {
+      setDoctores(prevState => prevState.filter(doctor => doctor.ID_D !== id));
+    })
+    .catch(error => console.error('Error deleting doctor:', error));
+  };
+
+  const handleEdit = doctor => {
+    setNuevoDoctor({
+      nombre: doctor.Nombre,
+      especialidad: doctor.Especialidad,
+      email: doctor.Email,
+      telefono: doctor.Teléfono,
+      horarios_consulta: doctor.HorariosConsulta
+    });
+    setEditDoctor(doctor);
   };
 
   return (
-    <div className="login-container">
-      {isLoggedIn ? (
-        <>
-          <h2 className="login-title">Lista de Dulces</h2>
-          <button className="button" onClick={handleLogout}>Logout</button>
-          <ul className="candy-list">
-            {candies.map(candy => (
-              <li key={candy.id} className="candy-item">{candy.brand} <br />origin: {candy.origin}</li>
+    <div className="container">
+      <div className="form-section">
+        <h2>{editDoctor ? "Editar Doctor" : "Registrar Nuevo Doctor"}</h2>
+        <form onSubmit={handleSubmit} className="form">
+          <label>
+            Nombre:
+            <input type="text" name="nombre" value={nuevoDoctor.nombre} onChange={handleChange} required />
+          </label>
+          <label>
+            Especialidad:
+            <input type="text" name="especialidad" value={nuevoDoctor.especialidad} onChange={handleChange} required />
+          </label>
+          <label>
+            Email:
+            <input type="email" name="email" value={nuevoDoctor.email} onChange={handleChange} required />
+          </label>
+          <label>
+            Teléfono:
+            <input type="tel" name="telefono" value={nuevoDoctor.telefono} onChange={handleChange} required />
+          </label>
+          <label>
+            Horarios de Consulta:
+            <input type="text" name="horarios_consulta" value={nuevoDoctor.horarios_consulta} onChange={handleChange} required />
+          </label>
+          <button type="submit" className="submit-button">{editDoctor ? "Actualizar" : "Registrar"}</button>
+        </form>
+      </div>
+
+      <div className="list-section">
+        <h1>Lista de Doctores</h1>
+        <table className="doctor-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Especialidad</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Horarios de Consulta</th>
+              <th>Operaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {doctores.map(doctor => (
+              <tr key={doctor.ID_D}>
+                <td>{doctor.Nombre}</td>
+                <td>{doctor.Especialidad}</td>
+                <td>{doctor.Email}</td>
+                <td>{doctor.Teléfono}</td>
+                <td>{doctor.HorariosConsulta}</td>
+                <td>
+                  <button className="edit-button" onClick={() => handleEdit(doctor)}>Editar</button>
+                  <button className="delete-button" onClick={() => handleDelete(doctor.ID_D)}>Eliminar</button>
+                </td>
+              </tr>
             ))}
-            
-          </ul>
-        </>
-      ) : (
-        <>
-          <h2 className="login-title">Login</h2>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="input-field"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-field"
-          />
-          <button className="button" onClick={handleLogin}>Login</button>
-          {loginResult === 'success' && <p className="status-message success-message">Login exitoso</p>}
-          {loginResult === 'error' && <p className="status-message error-message">Credenciales inválidas. Por favor, inténtalo de nuevo.</p>}
-        </>
-      )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-};
+}
 
-export default Login;
+export default App;
